@@ -36,7 +36,42 @@
                                             </div>
                                         @endif
 
-                                            
+                                         <div class="flex items-center gap-4 mb-2">
+                                            <form action="{{route('posts.like', $post)}}" method="POST">
+                                                @csrf
+                                                <button type="submit" class="flex items-center gap-1">
+                                                    @auth
+                                                    @if($post->isLikedBy(auth()->user()))
+                                                    <svg class="w-5 h-5 fill-red-600"><use xlink:href="#icon-heart"/></svg>
+                                                    <span class="text-red-600"> Unlike</span>
+                                                    @else
+                                                    <svg class="w-5 h-5 fill-none stroke-gray-600"><use xlink:href="#icon-heart"/></svg>
+                                                    <span class="text-red-600"> like</span>
+                                                    @endif
+                                                </button>
+                                                @endauth
+                                            </form>
+                                            <span class="text-gray-600">{{$post->likes()->count()}} likes</span>
+                                        </div>
+                                        <div class="space-y-2 mb-4">
+                                            @foreach($post->comments as $comment)
+                                                <div class="border-l-4 border-blue-200 pl-2">
+                                                    <strong>{{$comment->user->name}}</strong>
+                                                    <small class="text-gray-500">{{$comment->created_at->diffForHumans()}}</small>
+                                                    <p>{{$comment->body}}</p>
+                                                </div>
+                                            @endforeach
+                                        </div>
+
+                                        @auth
+                                            <form action="{{route('posts.comments.store', $post)}}" method="POST">
+                                                @csrf
+                                                <textarea name="body"  rows="2" placeholder="add a comment..." class="w-full border rounded p-2 mb-2"></textarea>
+                                                <button class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm">
+                                                    Comment
+                                                </button>
+                                            </form>
+                                            @endauth
 
 
                                         @if(auth()->check() && auth()->id() === $post->user->id)

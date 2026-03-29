@@ -13,7 +13,7 @@
         @csrf
     </form>
 
-    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
+    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6" enctype="multipart/form-data">
         @csrf
         @method('patch')
 
@@ -45,6 +45,24 @@
                     @endif
                 </div>
             @endif
+        </div>
+
+        <div>
+            <x-input-label  for="profile_image" :value="__('Profile picture')" />
+
+            <div class="flex-items-center gap-4 mt-2">
+                <img src="{{$user->profile_image ? asset('storage/' . $user->profile_image) : asset('images/default-avatar.png')}}" alt=""
+                class="w-20 h20 rounded-full object-cover shadow" >
+                <input id="profile_image" name="profile_image" type="file" accept="image/*" class="border rounded p-2 w-full" />
+            </div>
+            <x-input-error class="mt-2" :messages="$errors->get('profile_image')" />
+        </div>
+
+        <div>
+            <x-input-label for="about" :value="__('About me')" />
+            <textarea name="about" id="about" rows="5" class="mt-1 block w-full border rounded p-2"
+            placeholder="Tell me about yourself...">{{ old('about',$user->about)}}</textarea>
+            <x-input-error class="mt-2" :messages="$errors->get('about')" />
         </div>
 
         <div class="flex items-center gap-4">

@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\LikeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
@@ -19,16 +21,19 @@ Route::get('/dashboard', function () {
 
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [PostController::class, 'edit'])->name('profile.edit');
-    Route::delete('/profile', [PostController::class, 'destroy'])->name('profile.destroy');
-    Route::patch('/profile', [PostController::class, 'update'])->name('profile.update');
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
     Route::get('/users/{user}', [ProfileController::class, 'show'])->name('users.show');
 
     Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
-    Route::get('/posts', [PostController::class, 'create'])->name('posts.create');
+    Route::get('/posts/create', [PostController::class, 'create'])->name('posts.create');
     Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
     Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
+
+    Route::post('/posts/{post}/like', [LikeController::class,'toggle'])->name('posts.like');
+    Route::post('/posts/{post}/comments',[CommentController::class,'store'])->name('posts.comments.store');
 
 });
 
