@@ -26,6 +26,12 @@
                         My Profile
                 </x-nav-link>
                 </div>
+                @else
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('login')" :active="request()->routeIs('login')">
+                        Login
+                    </x-nav-link>
+                </div>
                 @endauth
             </div>
 
@@ -83,9 +89,15 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
+            @guest
+            <x-responsive-nav-link :href="route('login')" :active="request()->routeIs('login')">
+                {{ __('Login') }}
+            </x-responsive-nav-link>
+            @endguest
         </div>
 
         <!-- Responsive Settings Options -->
+        @auth
         <div class="pt-4 pb-1 border-t border-gray-200">
             <div class="px-4">
                 <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
@@ -109,5 +121,6 @@
                 </form>
             </div>
         </div>
+        @endauth
     </div>
 </nav>
