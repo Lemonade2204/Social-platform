@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\User;
+use GuzzleHttp\Promise\Create;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,6 +16,13 @@ class ProfileController extends Controller
     /**
      * Display the user's profile form.
      */
+
+    public function show(User $user)
+    {
+        $posts = $user->posts()->orderBy('created_at', 'desc')->get();
+        return view('profile.show', compact('user', 'posts'));
+    }
+
     public function edit(Request $request): View
     {
         return view('profile.edit', [

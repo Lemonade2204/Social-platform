@@ -23,11 +23,18 @@ class PostController extends Controller
     {
         $request->validate([
             'content' => 'required|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
+
+        $imagePath = null;
+        if($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('post_images', 'public');
+        }
 
         Post::create([
             'user_id' => auth()->id(),
             'content' => $request->content,
+            'image_path' => $imagePath,
         ]);
 
         return redirect()->route('posts.index')->with('success', 'Post created successfully!');
