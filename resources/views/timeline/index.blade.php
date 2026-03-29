@@ -1,6 +1,7 @@
 
 <x-app-layout>
     <x-slot name="header">
+
     </x-slot>
 
     <div class="py-12">
@@ -8,7 +9,7 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
                     <div class="container">
-                        <h1>All Posts</h1>
+                        <h1>Your Timeline</h1>
                         @if (session('success'))
                         <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-2 rounded">{{session('success')}}</div>
                         @endif
@@ -16,16 +17,12 @@
                         <a class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"  href="{{ route('posts.create')}}">Create a new Post</a>
                     </div>
                         <ul>
-                            @foreach($posts as $post)
+                            @forelse($posts as $post)
                             <div class="bg-white shadow-md rounded p-4 mb-4">
                                 
                                 <div class="flex items-center justify-between mb-2">
                                         <h2 class="font-bold">
-                                            @if($post->user)
-                                            <a href="{{route('users.show', $post->user)}}" class="text-blue-600 hover:underline">{{$post->user->name}}</a>
-                                            @else
-                                            Unknown User
-                                            @endif
+                                            <a href="{{route('users.show', $post->user_id)}}" class="text-blue-600 hover:underline">{{$post->user->name}}</a>
                                             </h2>
                                         <small class="text-gray-500">{{$post->created_at->diffForHumans() }}</small>
                                 </div>
@@ -37,7 +34,7 @@
                                             </div>
                                         @endif
 
-                                         <div class="flex items-center gap-4 mb-2">
+                                        <div class="flex items-center gap-4 mb-2">
                                             <form action="{{route('posts.like', $post)}}" method="POST">
                                                 @csrf
                                                 <button type="submit" class="flex items-center gap-1">
@@ -74,7 +71,6 @@
                                             </form>
                                             @endauth
 
-
                                         @if(auth()->check() && auth()->id() === $post->user->id)
                                         <form action="{{route('posts.destroy', $post)}}" method="POST">
                                             @csrf
@@ -83,10 +79,14 @@
                                         </form>
                                         @endif
                                     
-                        
+
                                 
                             </div>
-                            @endforeach
+                            @empty
+                            <li class="text-gray-600">
+                                Your timeline is empty , follow some users!
+                            </li>
+                            @endforelse
                         </ul>
                     </div>
                 </div>

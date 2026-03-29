@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\FollowController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TimelineController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -34,6 +36,8 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/posts/{post}/like', [LikeController::class,'toggle'])->name('posts.like');
     Route::post('/posts/{post}/comments',[CommentController::class,'store'])->name('posts.comments.store');
+    Route::post('/users/{user}/follow',[FollowController::class,'toggle'])->name('users.follow');
+    Route::get('/timeline',[TimelineController::class,'index'])->name('timeline');
 
 });
 

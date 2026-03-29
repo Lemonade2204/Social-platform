@@ -20,6 +20,26 @@
                         </p>
                     </div>
 
+
+                    <div class="flex items-center gap-6 mt-4">
+                        <span><strong>{{$user->followers()->count()}}</strong> followers</span>
+                        <span><strong>{{$user->followings()->count()}}</strong> following</span>
+                        @auth
+                            @if(auth()->id() !== $user->id)
+                                <form action="{{route('users.follow', $user)}}" method="POST">
+                                    @csrf
+                                    <button class="px-3 py-1 rounded
+                                        {{auth()->user()->isFollowing($user)
+                                        ? 'bg-gray-400 hover:bg-gray-400'
+                                        : 'bg-blue-500 hover:bg-blue-600 text-white'}}">
+                                        {{auth()->user()->isFollowing($user) ? 'Unfollow' : 'Follow'}}
+                                    </button>
+                                </form>
+                            @endif
+                        @endauth
+                    </div>
+
+                    
                     <section class="mb-10">
                         <h2 class="text-xl- font-semibold mb-2">About me</h2>
                         <div class="prose max-w-none">
@@ -35,7 +55,11 @@
                                 
                                 <div class="flex items-center justify-between mb-2">
                                         <h2 class="font-bold">
-                                            <a href="{{route('users.show', $post->user_id)}}" class="text-blue-600 hover:underline">{{$post->user->name}}</a>
+                                            @if($post->user)
+                                            <a href="{{route('users.show', $post->user)}}" class="text-blue-600 hover:underline">{{$post->user->name}}</a>
+                                            @else
+                                            Unknown User
+                                            @endif
                                             </h2>
                                         <small class="text-gray-500">{{$post->created_at->diffForHumans() }}</small>
                                 </div>
